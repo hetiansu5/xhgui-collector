@@ -52,11 +52,11 @@ return array(
     // call fastcgi_finish_request() in shutdown handler
     'fastcgi_finish_request' => true,
 
-    // Profile x in 100 requests. (E.g. set XHGUI_PROFLING_RATIO=50 to profile 50% of requests)
+    // Profile x in 10000 requests. (E.g. set XHGUI_PROFLING_RATIO=5000 to profile 50% of requests)
     // You can return true to profile every request.
     'profiler.enable' => function() {
-        $ratio = getenv('XHGUI_PROFILING_RATIO') ?: 100;
-        return (getenv('XHGUI_PROFILING') !== false) && (mt_rand(1, 100) <= $ratio);
+        $ratio = getenv('XHGUI_PROFILING_RATIO') ?: 10000;
+        return (getenv('XHGUI_PROFILING') !== false) && (mt_rand(1, 10000) <= $ratio);
     },
 
     'profiler.simple_url' => function($url) {

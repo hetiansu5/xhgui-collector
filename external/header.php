@@ -54,13 +54,7 @@
  * TIDEWAYS_FLAGS_NO_SPANS to disable timeline mode.
  */
 
-// this file should not - under no circumstances - interfere with any other application
-if (!extension_loaded('xhprof')
-    && !extension_loaded('uprofiler')
-    && !extension_loaded('tideways')
-    && !extension_loaded('tideways_xhprof')
-) {
-    error_log('xhgui - either extension xhprof, uprofiler, tideways or tideways_xhprof must be loaded');
+if (defined('_XHGUI_INIT')) {
     return;
 }
 
@@ -79,12 +73,22 @@ if (file_exists($configDir . 'config.php')) {
 }
 unset($dir, $configDir);
 
-if ((!extension_loaded('mongo') && !extension_loaded('mongodb')) && Xhgui_Config::read('save.handler') === 'mongodb') {
-    error_log('xhgui - extension mongo not loaded');
+if (!Xhgui_Config::shouldRun()) {
     return;
 }
 
-if (!Xhgui_Config::shouldRun()) {
+// this file should not - under no circumstances - interfere with any other application
+if (!extension_loaded('xhprof')
+    && !extension_loaded('uprofiler')
+    && !extension_loaded('tideways')
+    && !extension_loaded('tideways_xhprof')
+) {
+    error_log('xhgui - either extension xhprof, uprofiler, tideways or tideways_xhprof must be loaded');
+    return;
+}
+
+if ((!extension_loaded('mongo') && !extension_loaded('mongodb')) && Xhgui_Config::read('save.handler') === 'mongodb') {
+    error_log('xhgui - extension mongo not loaded');
     return;
 }
 
@@ -144,7 +148,7 @@ register_shutdown_function(
             $cmd = basename($_SERVER['argv'][0]);
             $uri = $cmd . ' ' . implode(' ', array_slice($_SERVER['argv'], 1));
         }
-        
+
         $replace_url = Xhgui_Config::read('profiler.replace_url');
         if (is_callable($replace_url)) {
             $uri = $replace_url($uri);
@@ -185,3 +189,5 @@ register_shutdown_function(
         }
     }
 );
+
+define('_XHGUI_INIT',true);
