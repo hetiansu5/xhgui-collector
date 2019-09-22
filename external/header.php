@@ -190,4 +190,4 @@ register_shutdown_function(
     }
 );
 
-define('_XHGUI_INIT',true);
+define('_XHGUI_INIT', true);

@@ -3,9 +3,9 @@
  * Default configuration for Xhgui
  */
 
-$mongoUri = getenv('XHGUI_MONGO_URI') ?: '127.0.0.1:27017';
+$mongoUri = get_server_env('XHGUI_MONGO_URI') ?: '127.0.0.1:27017';
 $mongoUri = str_replace('mongodb://', '', $mongoUri);
-$mongoDb = getenv('XHGUI_MONGO_DB') ?: 'xhprof';
+$mongoDb = get_server_env('XHGUI_MONGO_DB') ?: 'xhprof';
 
 return array(
     'debug' => false,
@@ -55,8 +55,8 @@ return array(
     // Profile x in 10000 requests. (E.g. set XHGUI_PROFLING_RATIO=5000 to profile 50% of requests)
     // You can return true to profile every request.
     'profiler.enable' => function() {
-        $ratio = getenv('XHGUI_PROFILING_RATIO') ?: 10000;
-        return (getenv('XHGUI_PROFILING') !== false) && (mt_rand(1, 10000) <= $ratio);
+        $ratio = get_server_env('XHGUI_PROFILING_RATIO') ?: 10000;
+        return (get_server_env('XHGUI_PROFILING') !== false) && (mt_rand(1, 10000) <= $ratio);
     },
 
     'profiler.simple_url' => function($url) {
